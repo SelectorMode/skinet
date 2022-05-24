@@ -1,12 +1,8 @@
-using API.Errors;
 using API.Extensions;
 using API.Helpers;
 using API.Middleware;
-using Core.Interfaces;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 
 namespace API
 {
@@ -29,7 +25,14 @@ namespace API
             services.AddApplicationServices();
             services.AddAutoMapper(typeof(MappingProfiles));
 
-            services.AddSwagggerDocumentation();    
+            services.AddSwagggerDocumentation();
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +55,8 @@ namespace API
             app.UseRouting();
             app.UseStaticFiles();
 
+            // to allow seeing headers from other origins requests
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
 
             app.UseSwaggerDocumentation();
