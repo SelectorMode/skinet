@@ -4,6 +4,9 @@ namespace API.Extensions
 {
     public static class SwaggerServiceExtensions
     {
+
+        private const string Bearer = "Bearer";
+
         public static IServiceCollection AddSwagggerDocumentation(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -20,15 +23,15 @@ namespace API.Extensions
                     Reference = new OpenApiReference
                     {
                         Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
+                        Id = Bearer
                     }
                 };
-                c.AddSecurityDefinition("Bearer", securitySchema);
+                c.AddSecurityDefinition(Bearer, securitySchema);
+
                 var sercurityRequirement = new OpenApiSecurityRequirement
                 {
-                    { securitySchema, new [] {"Bearer"} }
+                    { securitySchema, new [] { Bearer } }
                 };
-
                 c.AddSecurityRequirement(sercurityRequirement);
 
             });

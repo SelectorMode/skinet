@@ -14,7 +14,11 @@ export class LoadingInterceptor implements HttpInterceptor {
   constructor(private busyService: BusyService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.busyService.busy();
+    // exclude from interception for async email validation (spinner)
+    if(!request.url.includes('emailexists')){
+      this.busyService.busy();
+    }
+
     return next.handle(request).pipe(
       // to simulate slow network
       delay(1000),
