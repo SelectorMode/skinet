@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map, of, ReplaySubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { IAddress } from '../shared/models/address';
 import { IUser } from '../shared/models/user';
 
 @Injectable({
@@ -31,7 +32,7 @@ export class AccountService {
             this.currentUserSource.next(user);
           }
       })
-    )
+    );
   }
 
   login(values: any) {
@@ -59,11 +60,19 @@ export class AccountService {
   logout() {
     localStorage.removeItem('token');
     this.currentUserSource.next(null);
-    this.router.navigateByUrl('/')
+    this.router.navigateByUrl('/');
   }
 
   checkEmailExists(email: string){
     return this.http.get(this.baseUrl + 'account/emailexists?email=' + email);
+  }
+
+  getUserAddress() {
+    return this.http.get<IAddress>(this.baseUrl + 'account/address');
+  }
+
+  updateUserAddress(address: IAddress) {
+    return this.http.put<IAddress>(this.baseUrl + 'account/address', address);
   }
 
 }
