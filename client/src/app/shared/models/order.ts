@@ -23,6 +23,6 @@ export interface IOrder {
     shippingPrice: number;
     orderItems: IOrderItem[];
     subtotal: number;
-    totalotal: number;
+    total: number;
     status: string;
 }
